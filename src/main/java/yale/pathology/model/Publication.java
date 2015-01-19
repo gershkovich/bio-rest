@@ -336,7 +336,7 @@ public class Publication
     /**
      * Example
      * [1] Sinard JH, Gershkovich P: Custom software development for use in a clinical laboratory. Journal of pathology informatics 2012, 3:44.
-     * Sinard JH, Gershkovich P.: Custom software development for use in a clinical laboratory. J Pathol Inform 2012, 3:44
+     * //for direct display look up use http://www.ncbi.nlm.nih.gov/pubmed/?term=PMC2244333
      * @return
      */
 
