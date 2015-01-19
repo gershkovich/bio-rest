@@ -14,14 +14,13 @@ public class PubMedAPI
 {
     public String getResource(String url)
     {
-        //get pubmed data from Europe PubMed
+        //get pubmed central data from Europe PubMed
 
         //http://www.ebi.ac.uk/europepmc/webservices/rest/search/query=p53
 
         Client client = ClientBuilder.newClient();
 
         WebTarget target = client.target(url);
-
 
         String response = "";
 
