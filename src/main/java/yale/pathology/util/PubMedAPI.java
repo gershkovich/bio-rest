@@ -1,10 +1,19 @@
 package yale.pathology.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import yale.pathology.model.Publication;
+
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.client.WebTarget;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**
@@ -12,7 +21,7 @@ import javax.ws.rs.client.WebTarget;
  */
 public class PubMedAPI
 {
-    public String getResource(String url)
+    public String getResource(String url)  throws  ResponseProcessingException, NotAcceptableException
     {
         //get pubmed central data from Europe PubMed
 
@@ -22,25 +31,45 @@ public class PubMedAPI
 
         WebTarget target = client.target(url);
 
-        String response = "";
+        return target.request("application/xml").get(String.class);
 
-        try
-        {
-            response = target.request("application/json").get(String.class);
+    }
 
-        }   catch (ResponseProcessingException rex)
-        {
-            System.out.println(rex.getResponse().getStatus());
-            rex.printStackTrace();
+    public Collection<Publication> mapResults(String results) throws IOException
+    {
+        ArrayList<Publication> publications = new ArrayList<Publication>();
 
-        }   catch (NotAcceptableException nex)
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        JsonNode root = mapper.readTree(results);
+
+        JsonNode numFound = root.findValue("hitCount");
+
+        if (numFound != null && Integer.valueOf(numFound.toString()) > 0)
         {
-            System.out.println(nex.getResponse().getStatus());
-            nex.printStackTrace();
+            JsonNode docs = root.findValue("result");
+
+            Iterator<JsonNode> jsonNodeIterator = docs.elements();
+
+            while (jsonNodeIterator.hasNext())
+            {
+                JsonNode doc = jsonNodeIterator.next();
+
+                if (doc != null)
+                {
+                    System.out.println(doc.toString());
+
+                    Publication gene = mapper.readValue(doc.toString(), Publication.class);
+
+                    publications.add(gene);
+                }
+
+            }
+
         }
 
-
-        return  response;
-
+        return publications;
     }
 }

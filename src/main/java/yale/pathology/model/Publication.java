@@ -47,7 +47,7 @@ public class Publication
     private String isOpenAccess;
     private String inEPMC;
     private String inPMC;
-    private String citedByCount;
+    private int citedByCount;
     private String hasReferences;
     private String hasTextMinedTerms;
     private String hasDbCrossReferences;
@@ -237,15 +237,13 @@ public class Publication
         this.inPMC = inPMC;
     }
 
-    public String getCitedByCount()
+    public int getCitedByCount()
     {
-
         return citedByCount;
     }
 
-    public void setCitedByCount(String citedByCount)
+    public void setCitedByCount(int citedByCount)
     {
-
         this.citedByCount = citedByCount;
     }
 
@@ -342,7 +340,7 @@ public class Publication
 
     public String toString()
     {
-        return String.format(" %s: %s %s %s, %s:%s (%s)", getAuthorString(),  getTitle(), getJournalTitle(), getPubYear(), getJournalVolume(), getPageInfo(), getPmcid());
+        return String.format(" %s: %s %s %s, %s:%s (%s)", getAuthorString(),  getTitle(), getJournalTitle(), getPubYear(), getJournalVolume(), getPageInfo(), getPmid());
 
     }
 }
